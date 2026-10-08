@@ -1,0 +1,6 @@
+**/.gradle/
+**/build/
+.verify/
+.secrets/
+.idea/
+*.iml
