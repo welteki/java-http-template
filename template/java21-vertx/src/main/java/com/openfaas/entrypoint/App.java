@@ -19,7 +19,7 @@ public final class App {
 
         try {
             vertx.createHttpServer()
-                .requestHandler(router(vertx, new com.openfaas.function.Handler()))
+                .requestHandler(router(vertx, new com.openfaas.function.Handler(vertx)))
                 .listen(8082, "127.0.0.1")
                 .toCompletionStage().toCompletableFuture().join();
             System.out.println("Listening on 127.0.0.1:8082");

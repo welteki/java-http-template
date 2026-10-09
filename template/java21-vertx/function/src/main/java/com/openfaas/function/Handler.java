@@ -1,8 +1,15 @@
 package com.openfaas.function;
 
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 
 public class Handler implements io.vertx.core.Handler<RoutingContext> {
+    private final Vertx vertx;
+
+    public Handler(Vertx vertx) {
+        this.vertx = vertx;
+    }
+
     @Override
     public void handle(RoutingContext context) {
         String body = context.body().asString();

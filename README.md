@@ -95,14 +95,21 @@ faas-cli logs hello-java
 
 ### Read the request body and return text
 
-The generated handler returns a greeting. The request body has already been buffered before `handle` is called:
+The generated handler returns a greeting. The `Vertx` instance is passed to the handler constructor, so you can use it for web clients, database connections or other Vert.x APIs. The request body has already been buffered before `handle` is called:
 
 ```java
 package com.openfaas.function;
 
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 
 public class Handler implements io.vertx.core.Handler<RoutingContext> {
+    private final Vertx vertx;
+
+    public Handler(Vertx vertx) {
+        this.vertx = vertx;
+    }
+
     @Override
     public void handle(RoutingContext context) {
         String body = context.body().asString();
@@ -185,7 +192,7 @@ Always end the response, or arrange for an asynchronous callback to end it. An u
 
 ### Reuse clients between invocations
 
-The handler is created once per application process. You can keep reusable clients or connection pools in handler fields. Each replica has its own instance, and that state is lost when the replica stops.
+The handler is created once per application process, with the `Vertx` instance passed to its constructor. You can keep reusable clients or connection pools in handler fields. Each replica has its own instance, and that state is lost when the replica stops.
 
 Handlers run on the Vert.x event loop. Use asynchronous clients for network and database calls; do not block the event loop with `Thread.sleep`, JDBC calls or blocking HTTP clients. Request-specific data belongs in local variables or the `RoutingContext`, rather than shared handler fields.
 
